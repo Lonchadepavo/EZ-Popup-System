@@ -1,0 +1,34 @@
+{
+    "name": "PopupControls",
+    "maps": [
+        {
+            "name": "Popups",
+            "id": "a41f6d67-a225-430c-88ce-0935e1bec133",
+            "actions": [
+                {
+                    "name": "Next",
+                    "type": "Button",
+                    "id": "ae1d50e2-d8ef-42ac-bf2a-8328b8500eb9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3a0a788a-9c6a-4696-8b5e-c72eebc35f05",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

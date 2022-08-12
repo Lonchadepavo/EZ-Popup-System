@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26209b091b4747c488b66ff9539587c9, type: 3}
+  m_Name: Popup2
+  m_EditorClassIdentifier: 
+  popup_id_: 0
+  popup_name_: PopupTest2
+  popup_text_: Popup test 2 text.
+  left_image_: {fileID: 2444792113611549451, guid: ffa3b511f6ef1e74985c06786fcc69eb, type: 3}
+  right_image_: {fileID: 6842811978280092183, guid: 2bf51ce006fca7d4ca87464c14b29cdd, type: 3}
+  animated_sprite_: {fileID: 3677730572600306388, guid: eceac00f4fe8e534796e16ec9bf83f3f, type: 3}
+  on_popup_open_event_:
+    m_PersistentCalls:
+      m_Calls: []
+  on_popup_close_event_:
+    m_PersistentCalls:
+      m_Calls: []
+  popup_delay_time_: 0
+  next_popup_: {fileID: 0}
