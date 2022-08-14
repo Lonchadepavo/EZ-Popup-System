@@ -24,7 +24,7 @@ public class PopupAudioManager : MonoBehaviour {
 
   public void ConfigureAudioSources(PopupSkin setting) {
     popup_music_source_.clip = setting.popup_background_music_;
-    popup_text_source_.clip = setting.popup_text_sound_;
+    popup_text_source_.clip = popup_manager_ref_.current_popup_.popup_text_sound_;
 
     popup_music_source_.volume = setting.popup_music_volume_;
     popup_sounds_source_.volume = setting.popup_sfx_volume_;
@@ -53,8 +53,8 @@ public class PopupAudioManager : MonoBehaviour {
   public void PlayTextSFX(AudioClip sfx_clip = null) {
     if (sfx_clip != null) {
       popup_text_source_.clip = sfx_clip;
-      popup_text_source_.pitch = Random.Range(popup_manager_ref_.current_canvas_skin_.text_min_pitch_variation_,
-                                              popup_manager_ref_.current_canvas_skin_.text_max_pitch_variation_);
+      popup_text_source_.pitch = Random.Range(popup_manager_ref_.current_popup_.text_min_pitch_variation_,
+                                              popup_manager_ref_.current_popup_.text_max_pitch_variation_);
       
       popup_text_source_.Play();
     }

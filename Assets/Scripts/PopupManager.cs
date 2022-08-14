@@ -34,6 +34,9 @@ public class PopupManager : MonoBehaviour {
   GameObject popup_background_image_;
 
   [SerializeField]
+  AnimationClip default_anim_;
+
+  [SerializeField]
   TextMeshProUGUI popup_text_;
 
   //Text animation variables
@@ -42,6 +45,7 @@ public class PopupManager : MonoBehaviour {
   float current_time_scale_;
   float saved_time_scale_;
 
+  public PopupScriptable debug_popup_;
 
   void Awake() {
     audio_manager_ref_ = GetComponent<PopupAudioManager>();
@@ -60,7 +64,8 @@ public class PopupManager : MonoBehaviour {
   }
 
   void Start() {
-    ReloadPopupCanvas();
+    //DEBUG
+    OpenPopup(debug_popup_);
   }
 
   void ReloadPopupCanvas() {
@@ -68,8 +73,8 @@ public class PopupManager : MonoBehaviour {
     popup_background.sprite = current_canvas_skin_.popup_background_image_;
     popup_background.color = popup_background.color + current_canvas_skin_.poup_background_color_;
 
-    popup_text_.color = current_canvas_skin_.popup_text_color_;
-    popup_text_.font = current_canvas_skin_.popup_text_font_;
+    popup_text_.color = current_popup_.popup_text_color_;
+    popup_text_.font = current_popup_.popup_text_font_;
   }
 
   // Adds a new popup to execute it.
@@ -77,12 +82,16 @@ public class PopupManager : MonoBehaviour {
     if (current_popup_ == null) { 
       current_popup_ = popup;
 
+      ReloadPopupCanvas();
+
       current_time_scale_ = current_canvas_skin_.popup_time_scale_ > 0.0f ? current_canvas_skin_.popup_time_scale_ : 0.00001f;
 
+      audio_manager_ref_.ConfigureAudioSources(current_canvas_skin_);
+
       //Configure popup canvas with the current popup data. (could add some dotween here)
-      ConfigureSpriteInfo(current_popup_.left_image_, left_image_);
-      ConfigureSpriteInfo(current_popup_.right_image_, right_image_);
-      ConfigureSpriteInfo(current_popup_.animated_sprite_, animated_image_);
+      ConfigureSpriteInfo(current_popup_.left_animation_, current_popup_.left_sprite_, left_image_);
+      ConfigureSpriteInfo(current_popup_.right_animation_, current_popup_.right_sprite_, right_image_);
+      ConfigureSpriteInfo(current_popup_.central_animation_, current_popup_.central_sprite_, animated_image_);
 
       popup_text_.text = "";
       StartCoroutine(ShowText());
@@ -91,8 +100,6 @@ public class PopupManager : MonoBehaviour {
       if (current_popup_.on_popup_open_event_ != null) StartCoroutine(PopupEventDelay(current_popup_.on_popup_open_event_));
 
       if (!canvas_parent_.activeSelf) {
-        audio_manager_ref_.ConfigureAudioSources(current_canvas_skin_);
-
         if (current_canvas_skin_.close_external_canvas_) { 
           FindOtherCanvas();
           SaveOtherCanvas();
@@ -185,25 +192,28 @@ public class PopupManager : MonoBehaviour {
     ReloadPopupCanvas();
   }
 
-  void ConfigureSpriteInfo(GameObject source, GameObject target) {
-    if (source != null) {
-      Image img = source.GetComponent<Image>();
-      Animator anim = source.GetComponent<Animator>();
+  void ConfigureSpriteInfo(AnimationClip clip, Sprite sprite, GameObject target) {
+    if (sprite) {
+      Image target_img = target.GetComponent<Image>();
 
-      if (img) {
-        Image target_img = target.GetComponent<Image>();
-
-        target_img.sprite = img.sprite;
-        target_img.color = img.color;
-      }
-
-      if (anim) {
-        Animator target_anim = target.GetComponent<Animator>();
-
-        target_anim.runtimeAnimatorController = anim.runtimeAnimatorController;
-        target_anim.speed = current_canvas_skin_.popup_animation_speed_ / current_time_scale_;
-      }
+      target_img.sprite = sprite;
     }
+
+    if (!clip) clip = default_anim_;
+    Animator target_anim = target.GetComponent<Animator>();
+
+    AnimatorOverrideController animator_override = new AnimatorOverrideController(target_anim.runtimeAnimatorController);
+    var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+
+    foreach (var a in animator_override.animationClips) { 
+      anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(a, clip));
+      }
+
+    animator_override.ApplyOverrides(anims);
+    target_anim.runtimeAnimatorController = animator_override;
+    target_anim.speed = current_canvas_skin_.popup_animation_speed_ / current_time_scale_;
+
+      //target_anim.runtimeAnimatorController = anim.runtimeAnimatorController;
   }
 
   IEnumerator ShowText() {
@@ -215,9 +225,9 @@ public class PopupManager : MonoBehaviour {
       popup_text_.text = additive_text_;
 
       //Text sound
-      audio_manager_ref_.PlayTextSFX(current_canvas_skin_.popup_text_sound_);
+      audio_manager_ref_.PlayTextSFX(current_popup_.popup_text_sound_);
 
-      yield return new WaitForSecondsRealtime(current_canvas_skin_.popup_text_speed_);
+      yield return new WaitForSecondsRealtime(current_popup_.popup_text_speed_);
     }
 
     yield return null;

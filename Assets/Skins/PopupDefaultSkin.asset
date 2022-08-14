@@ -12,21 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb0ee3134efbb2743becd94433de8b94, type: 3}
   m_Name: PopupDefaultSkin
   m_EditorClassIdentifier: 
-  popup_background_image_: {fileID: 21300000, guid: b0b97b5855af8a14d8ce4cc2ccecf17e, type: 3}
-  poup_background_color_: {r: 1, g: 0, b: 0, a: 1}
+  popup_background_image_: {fileID: 21300000, guid: 01dfd046a0f0f2a42b758369f7c76cb1, type: 3}
+  poup_background_color_: {r: 1, g: 1, b: 1, a: 1}
   popup_animation_speed_: 1
   popup_time_scale_: 0
   close_external_canvas_: 1
   stop_external_audio_sources_: 1
-  popup_text_font_: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  popup_text_color_: {r: 1, g: 1, b: 1, a: 1}
-  popup_text_speed_: 0.1
-  popup_text_sound_: {fileID: 8300000, guid: 8c3650922026d3b4cbc3f81654b8d840, type: 3}
-  text_min_pitch_variation_: 1
-  text_max_pitch_variation_: 2
-  popup_open_sound_: {fileID: 0}
-  popup_close_sound_: {fileID: 0}
-  popup_next_sound_: {fileID: 0}
-  popup_background_music_: {fileID: 8300000, guid: d3bcd54a55cee4541aa75305303a6a9d, type: 3}
+  popup_open_sound_: {fileID: 8300000, guid: 2dd6a6a1a75c88940a50b15b40d0b343, type: 3}
+  popup_close_sound_: {fileID: 8300000, guid: 061585a0c51625644b40d14333e505d0, type: 3}
+  popup_next_sound_: {fileID: 8300000, guid: d9331e0fb3a75df40b8d1b29dd578adb, type: 3}
+  popup_background_music_: {fileID: 0}
   popup_sfx_volume_: 1
   popup_music_volume_: 0.1
