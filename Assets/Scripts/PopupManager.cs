@@ -235,10 +235,16 @@ public class PopupManager : MonoBehaviour {
     }
 
     yield return null;
+    if (current_popup_.popup_time_limit_ >= 0.0f) StartCoroutine(PopupTimeLimit());
+  }
+
+  IEnumerator PopupTimeLimit() {
+    yield return new WaitForSecondsRealtime(current_popup_.popup_time_limit_);
+    NextPopup();
   }
 
   IEnumerator PopupEventDelay(UnityEvent e) {
-    yield return new WaitForSeconds(current_popup_.popup_delay_time_);
+    yield return new WaitForSeconds(current_popup_.popup_event_delay_time_);
     CallSimplePopupEvent(e);
   }
 

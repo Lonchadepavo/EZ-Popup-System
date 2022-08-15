@@ -24,15 +24,12 @@ public class PopupScriptable : ScriptableObject {
   public Sprite central_sprite_;
   public AnimationClip central_animation_;
 
-  /*
-  public GameObject left_image_;
-  public GameObject right_image_;
-  public GameObject animated_sprite_;*/
-
   public UnityEvent on_popup_open_event_;
   public UnityEvent on_popup_close_event_;
 
-  public float popup_delay_time_;
+  public float popup_event_delay_time_;
+  [Tooltip("Time limit for the popup, this time will be start after the text finished showing. -1 for unlimited time.")]
+  public float popup_time_limit_ = -1.0f;
 
   //-------POPUP TEXT SETTINGS-------//
   [Header("Popup text settings")]
