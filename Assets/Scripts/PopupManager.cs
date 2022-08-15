@@ -9,6 +9,7 @@ using TMPro;
 public class PopupManager : MonoBehaviour {
   //PUBLIC TEMPORAL FOR TESTING
   public PopupScriptable current_popup_;
+
   GameObject canvas_parent_;
   List<Canvas> other_canvas_;
   List<bool> other_canvas_backup_;
@@ -93,11 +94,10 @@ public class PopupManager : MonoBehaviour {
       ConfigureSpriteInfo(current_popup_.right_animation_, current_popup_.right_sprite_, right_image_);
       ConfigureSpriteInfo(current_popup_.central_animation_, current_popup_.central_sprite_, animated_image_);
 
-      popup_text_.text = "";
-      StartCoroutine(ShowText());
-
       //Prepare the popup screen (if there is any canvas opened, it stores its state and closes it, after the popup is closed it restores the previous canvas)
       if (current_popup_.on_popup_open_event_ != null) StartCoroutine(PopupEventDelay(current_popup_.on_popup_open_event_));
+
+      float text_delay = 0.0f;
 
       if (!canvas_parent_.activeSelf) {
         if (current_canvas_skin_.close_external_canvas_) { 
@@ -118,7 +118,12 @@ public class PopupManager : MonoBehaviour {
         audio_manager_ref_.StartMusic();
 
         canvas_parent_.GetComponent<Animator>().SetBool("PopupIn", true);
+
+        text_delay = canvas_parent_.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length;
       }
+
+      popup_text_.text = "";
+      StartCoroutine(ShowText(text_delay));
 
     } else {
       Debug.Log("A popup is already open.");
@@ -138,21 +143,20 @@ public class PopupManager : MonoBehaviour {
       audio_manager_ref_.PlaySFX(current_canvas_skin_.popup_next_sound_);
 
     } else {
-      ClosePopup();
+      StartCoroutine(ClosePopup());
 
       // Close popup sound
       audio_manager_ref_.PlaySFX(current_canvas_skin_.popup_close_sound_);
     }
   }
 
-  public void ClosePopup() {
-    //Close popup code (could add some dotween here)
-    if (canvas_parent_.activeSelf) canvas_parent_.SetActive(false);
-    
-    current_popup_ = null;
-
-    //Need a time stop here
+  IEnumerator ClosePopup() {
     canvas_parent_.GetComponent<Animator>().SetBool("PopupIn", false);
+
+    yield return new WaitForSecondsRealtime(canvas_parent_.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length);
+
+    if (canvas_parent_.activeSelf) canvas_parent_.SetActive(false);
+    current_popup_ = null;
 
     RestoreOtherCanvas();
     RestoreOtherInputs();
@@ -212,11 +216,11 @@ public class PopupManager : MonoBehaviour {
     animator_override.ApplyOverrides(anims);
     target_anim.runtimeAnimatorController = animator_override;
     target_anim.speed = current_canvas_skin_.popup_animation_speed_ / current_time_scale_;
-
-      //target_anim.runtimeAnimatorController = anim.runtimeAnimatorController;
   }
 
-  IEnumerator ShowText() {
+  IEnumerator ShowText(float initial_delay = 0.0f) {
+    yield return new WaitForSecondsRealtime(initial_delay);
+
     int number_characters = current_popup_.popup_text_.Length;
 
     //Should use an event when the animation finishes
