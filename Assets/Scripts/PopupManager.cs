@@ -45,6 +45,8 @@ public class PopupManager : MonoBehaviour {
 
   float current_time_scale_;
   float saved_time_scale_;
+  
+  bool closing_popup_ = false;
 
   public PopupScriptable debug_popup_;
 
@@ -82,6 +84,7 @@ public class PopupManager : MonoBehaviour {
   public void OpenPopup(PopupScriptable popup) {
     if (current_popup_ == null) { 
       current_popup_ = popup;
+      closing_popup_ = false;
 
       ReloadPopupCanvas();
 
@@ -152,6 +155,7 @@ public class PopupManager : MonoBehaviour {
 
   IEnumerator ClosePopup() {
     canvas_parent_.GetComponent<Animator>().SetBool("PopupIn", false);
+    closing_popup_ = true;
 
     yield return new WaitForSecondsRealtime(canvas_parent_.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length);
 
@@ -178,8 +182,7 @@ public class PopupManager : MonoBehaviour {
         popup_text_.text = current_popup_.popup_text_;
 
       } else {
-        NextPopup();
-
+        if (!closing_popup_) NextPopup();
       }
       
     }
@@ -197,23 +200,27 @@ public class PopupManager : MonoBehaviour {
   }
 
   void ConfigureSpriteInfo(AnimationClip clip, Sprite sprite, GameObject target) {
+    Image target_img = target.GetComponent<Image>();
     if (sprite) {
-      Image target_img = target.GetComponent<Image>();
-
+      target.SetActive(true);
       target_img.sprite = sprite;
+
+    } else {
+      target.SetActive(false);
     }
 
     if (!clip) clip = default_anim_;
     Animator target_anim = target.GetComponent<Animator>();
 
     AnimatorOverrideController animator_override = new AnimatorOverrideController(target_anim.runtimeAnimatorController);
-    var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+    List<KeyValuePair<AnimationClip, AnimationClip>> anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
 
     foreach (var a in animator_override.animationClips) { 
       anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(a, clip));
-      }
+    }
 
     animator_override.ApplyOverrides(anims);
+
     target_anim.runtimeAnimatorController = animator_override;
     target_anim.speed = current_canvas_skin_.popup_animation_speed_ / current_time_scale_;
   }

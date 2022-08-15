@@ -17,7 +17,7 @@ MonoBehaviour:
   popup_text_: Popup test 1 text.
   left_sprite_: {fileID: 21300000, guid: 1ffb1ee26a661524da81e03a7c7e0d1c, type: 3}
   left_animation_: {fileID: 7400000, guid: 5fdd32824f4ced6439efdd294267d4f4, type: 2}
-  right_sprite_: {fileID: 21300000, guid: 90f54cba02e95f54e91d63c5ef692de6, type: 3}
+  right_sprite_: {fileID: 0}
   right_animation_: {fileID: 0}
   central_sprite_: {fileID: 21300000, guid: e0be1c205e65c0142be455ec9f221fe1, type: 3}
   central_animation_: {fileID: 7400000, guid: 5fdd32824f4ced6439efdd294267d4f4, type: 2}
@@ -27,7 +27,8 @@ MonoBehaviour:
   on_popup_close_event_:
     m_PersistentCalls:
       m_Calls: []
-  popup_delay_time_: 0
+  popup_event_delay_time_: 0
+  popup_time_limit_: 1
   popup_text_font_: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   popup_text_color_: {r: 1, g: 1, b: 1, a: 1}
   popup_text_speed_: 0.1
