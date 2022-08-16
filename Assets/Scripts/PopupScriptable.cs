@@ -24,10 +24,6 @@ public class PopupScriptable : ScriptableObject {
   public Sprite central_sprite_;
   public AnimationClip central_animation_;
 
-  public UnityEvent on_popup_open_event_;
-  public UnityEvent on_popup_close_event_;
-
-  public float popup_event_delay_time_;
   [Tooltip("Time limit for the popup, this time will be start after the text finished showing. -1 for unlimited time.")]
   public float popup_time_limit_ = -1.0f;
 
@@ -47,6 +43,12 @@ public class PopupScriptable : ScriptableObject {
   public float text_max_pitch_variation_ = 1.0f;
 
   public PopupScriptable next_popup_;
+
+  //-------POPUP EVENT SETTINGS-------//
+  [Header("Popup event settings.")]
+  public float popup_event_delay_time_;
+  public UnityEvent on_popup_open_event_;
+  public UnityEvent on_popup_close_event_;
 
   // popups should include a path to i'ts translation folder and read the text from there
 }

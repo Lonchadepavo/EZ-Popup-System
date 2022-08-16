@@ -246,8 +246,12 @@ public class PopupManager : MonoBehaviour {
   }
 
   IEnumerator PopupTimeLimit() {
+    PopupScriptable saved_popup = current_popup_;
     yield return new WaitForSecondsRealtime(current_popup_.popup_time_limit_);
-    NextPopup();
+    
+    if (saved_popup == current_popup_) { 
+      NextPopup();
+    }
   }
 
   IEnumerator PopupEventDelay(UnityEvent e) {
